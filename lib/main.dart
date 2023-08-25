@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:video_call/ui/login_page.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 void main() async {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+
+  ZegoUIKit().initLog().then((value) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatefulWidget {

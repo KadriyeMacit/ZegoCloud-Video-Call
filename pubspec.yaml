@@ -37,7 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   zego_uikit_prebuilt_call: ^3.12.3
   cached_network_image: ^3.2.3
-  uuid: ^3.0.7
+  device_info_plus: any
+ 
 
 
 dev_dependencies:

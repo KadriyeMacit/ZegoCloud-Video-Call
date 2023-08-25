@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:video_call/model/call_model.dart';
+import 'package:video_call/models/call_model.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import '../custom_avatar_builder.dart';
+import 'custom_avatar_builder.dart';
+import '../../models/user_model.dart';
 
-class CallPage extends StatefulWidget {
-  const CallPage({Key? key}) : super(key: key);
+class CallPage extends StatelessWidget {
+  CallPage({Key? key, required this.callId}) : super(key: key);
+  final String callId;
 
-  @override
-  State<StatefulWidget> createState() => CallPageState();
-}
-
-class CallPageState extends State<CallPage> {
-  ZegoUIKitPrebuiltCallController callController =
+  final ZegoUIKitPrebuiltCallController? callController =
       ZegoUIKitPrebuiltCallController();
 
   @override
@@ -20,9 +17,10 @@ class CallPageState extends State<CallPage> {
       child: ZegoUIKitPrebuiltCall(
         appID: CallModel.appID,
         appSign: CallModel.appSign,
-        userID: CallModel.userID,
-        userName: CallModel.username,
-        callID: CallModel.callID,
+        userID: currentUser.id,
+        userName: currentUser.name,
+        callID: callId,
+        controller: callController,
         config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
 
           /// support minimizing

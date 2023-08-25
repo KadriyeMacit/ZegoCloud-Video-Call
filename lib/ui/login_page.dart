@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
-import 'package:video_call/model/call_model.dart';
-import 'package:video_call/ui/home_page.dart';
+import 'package:video_call/models/call_model.dart';
+import 'package:video_call/ui/home/home_page.dart';
+import '../models/user_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,12 +11,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final Uuid uuid = const Uuid();
+  final TextEditingController userIdTextController =
+      TextEditingController(text: 'user_id');
 
   @override
   void initState() {
     super.initState();
-    CallModel.userID = uuid.v4();
+    setup();
+  }
+
+  void setup() async {
+    CallModel.getUniqueUserId().then((userId) async {
+      setState(() {
+        userIdTextController.text = userId;
+      });
+    });
   }
 
   @override
@@ -27,14 +36,14 @@ class LoginPageState extends State<LoginPage> {
         onWillPop: () async {
           return false;
         },
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
                     "assets/logo.png",
@@ -42,6 +51,7 @@ class LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 50),
                   TextField(
+                    controller: userIdTextController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -66,12 +76,7 @@ class LoginPageState extends State<LoginPage> {
                       onChanged: (value) => () {}),
                   const SizedBox(height: 30),
                   InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
-                    },
+                    onTap: () => signIn(),
                     child: Container(
                       height: 50,
                       width: 200,
@@ -93,6 +98,15 @@ class LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void signIn() {
+    currentUser.id = userIdTextController.text;
+    currentUser.name = 'user_${userIdTextController.text}';
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 }
